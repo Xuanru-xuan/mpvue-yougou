@@ -1,34 +1,40 @@
 <template>
   <div>
     <!-- 头部 -->
-    <div class="header">
-      <div class="inner">
-        <icon type="search" size="16"></icon>
-        <span>搜索</span>
-      </div>
-    </div>
+    <searchLink/>
 
     <!-- 轮播图 -->
     <swiper indicator-dots autoplay circular>
-      <block v-for="item in 3" :key="item">
+      <block v-for="item in swiperdata" :key="item">
         <swiper-item>
-          <img src="https://api.zbztb.cn/pyg/banner1.png" alt="" />
+          <img :src="item.image_src" alt="" />
         </swiper-item>
       </block>
     </swiper>
 
     <!-- 导航 -->
     <div class="nav">
-      <img src="https://api.zbztb.cn/pyg/icon_index_nav_4@2x.png" v-for="item in 4" :key="item" alt="">
+      <img
+        v-for="item in catitems"
+        :src="item.image_src"
+        :key="item"
+        alt=""
+      />
     </div>
 
     <!-- 楼层 -->
-    <div class="floor" v-for="(item,i) in 3" :key="i">
-      <img src="https://api.zbztb.cn/pyg/pic_floor01_title.png" alt="">
+    <div class="floor" v-for="(floor, i) in floordata" :key="i">
+      <img :src="floor.floor_title.image_src" alt="" />
       <div class="productList">
-        <img src="https://api.zbztb.cn/pyg/pic_floor01_1@2x.png" alt="">
+        <img :src="floor.product_list[0].image_src" alt="" />
         <div class="right">
-          <img src="https://api.zbztb.cn/pyg/pic_floor01_2@2x.png" v-for="(items, index) in 4" :key="index" alt="">
+          <block v-for="(item, index) in floor.product_list" :key="index">
+          <img
+            v-if="index"
+            :src="item.image_src"
+            alt=""
+          />
+          </block>
         </div>
       </div>
     </div>
@@ -36,7 +42,51 @@
 </template>
 
 <script>
-export default {}
+import searchLink from '../../components/searchLink'
+export default {
+  components: {
+    searchLink
+  },
+  data () {
+    return {
+      swiperdata: [],
+      catitems: [],
+      floordata: []
+    }
+  },
+
+  onLoad () {
+    this.getSwiperdata()
+    this.getCatitems()
+    this.getFloordata()
+  },
+
+  methods: {
+    async getSwiperdata () {
+      this.swiperdata = await this.$request({
+        url: '/api/public/v1/home/swiperdata'
+      })
+    },
+    getCatitems () {
+      this.$request({
+        url: '/api/public/v1/home/catitems'
+      }).then(data => {
+        this.catitems = data
+      })
+    },
+
+    getFloordata () {
+      wx.request({
+        url: 'https://api.zbztb.cn/api/public/v1/home/floordata',
+        success: res => {
+          if (res.data.meta.status === 200) {
+            this.floordata = res.data.message
+          }
+        }
+      })
+    }
+  }
+}
 </script>
 
 <style lang="less">
@@ -88,7 +138,7 @@ swiper {
   img {
     height: 88rpx;
     width: 100%;
-    background-color: #ccc;
+    // background-color: #ccc;
   }
   .productList {
     display: flex;

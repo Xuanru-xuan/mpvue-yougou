@@ -1,9 +1,13 @@
 <template>
-  <div>分类</div>
+  <searchLink/>
 </template>
 
 <script>
+import searchLink from '../../components/searchLink'
 export default {
+  components: {
+    searchLink
+  }
 
 }
 </script>
