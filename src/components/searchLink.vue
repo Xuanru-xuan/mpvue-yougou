@@ -2,8 +2,9 @@
     <!-- 头部 -->
     <div class="header">
       <div class="inner">
-        <icon type="search" size="16"></icon>
-        <span>搜索</span>
+        <input type="search" placeholder="搜索">
+        <!-- <icon type="search" size="16"></icon> -->
+        <!-- <span>搜索</span> -->
       </div>
     </div>
 </template>
@@ -29,10 +30,16 @@ export default {
     align-items: center;
     justify-content: center;
     color: #bbb;
-
+    input {
+      width: 100%;
+      color: #000;
+      text-indent: 340rpx;
+    }
     icon {
       margin-right: 10rpx;
       margin-top: 6rpx;
+      position: absolute;
+      left: 52%;
     }
   }
 }
