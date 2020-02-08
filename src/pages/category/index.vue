@@ -19,7 +19,7 @@
           <li class="cate2" v-for="(cate2, index2) in categories[activeIndex].children" :key="index2">
             <p class="title">/<span>{{ cate2.cat_name }}</span>/</p>
             <ul>
-              <li class="cate3" v-for="(cate3, index3) in cate2.children" :key="index3">
+              <li @click="toSearchBar(cate3.cat_name)" class="cate3" v-for="(cate3, index3) in cate2.children" :key="index3">
                 <img
                   :src="cate3.cat_icon"
                   alt=""
@@ -53,6 +53,11 @@ export default {
     async getCategories () {
       this.categories = await this.$request({
         url: '/api/public/v1/categories'
+      })
+    },
+    toSearchBar (name) {
+      wx.navigateTo({
+        url: '/pages/search_list/main?name=' + name
       })
     }
   }

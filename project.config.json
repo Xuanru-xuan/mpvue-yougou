@@ -53,6 +53,27 @@
 					"id": -1,
 					"name": "pages/category/main",
 					"pathName": "pages/category/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/search_list/main",
+					"pathName": "pages/search_list/main",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/search_list/main",
+					"pathName": "pages/search_list/main",
+					"query": "name=小米",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/home/main",
+					"pathName": "pages/home/main",
+					"query": "name=小米",
 					"scene": null
 				}
 			]

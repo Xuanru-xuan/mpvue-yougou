@@ -10,6 +10,9 @@ export default function request (options) {
     }
     wx.request({
       url: BASE_URL + options.url,
+      methods: options.method || 'GET',
+      data: options.data || '',
+      dataType: 'json',
       success: res => {
         let { meta, message } = res.data
         if (meta.status === 200) {
