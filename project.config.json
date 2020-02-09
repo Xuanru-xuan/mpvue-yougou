@@ -88,12 +88,34 @@
 					"id": -1,
 					"name": "pages/category/main",
 					"pathName": "pages/category/main",
+					"query": "",
 					"scene": null
 				},
 				{
 					"id": -1,
 					"name": "pages/home/main",
 					"pathName": "pages/home/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/item/main",
+					"pathName": "pages/item/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/category/main",
+					"pathName": "pages/category/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/category/main",
+					"pathName": "pages/category/main",
 					"scene": null
 				}
 			]

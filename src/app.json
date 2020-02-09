@@ -4,7 +4,10 @@
     "pages/category/main",
     "pages/cart/main",
     "pages/me/main",
-    "pages/search_list/main"
+    "pages/search_list/main",
+    "pages/login/main",
+    "pages/pay/main",
+    "pages/item/main"
     ],
   "window": {
     "backgroundTextStyle": "light",
@@ -36,7 +39,7 @@
         },
         {
           "pagePath": "pages/me/main",
-          "text": "分类",
+          "text": "我的",
           "iconPath": "/static/images/icon/icon_me@3x.png",
           "selectedIconPath": "/static/images/icon/icon_me_active@3x.png"
         }

@@ -1,6 +1,7 @@
 <template>
   <div>
       <!-- 头部 -->
+     <div class="top-header" :style="{position:isFixed?'fixed':'static'}">
       <div class="header">
         <icon type="search"
               size="16"
@@ -16,10 +17,11 @@
             v-for="(item, index) in tabList"
             :key="index">{{item}}</li>
       </ul>
+  </div>
 
     <!-- 商品列表 -->
-    <ul class="goods-list">
-      <li class="goods" v-for="(item, index) in goodsList" :key="index">
+    <ul class="goods-list"  :style="{marginTop:isFixed?'220rpx':'0'}">
+      <li class="goods" v-for="(item, index) in goodsList" :key="index" @click="toItem(item.goods_id)">
         <img :src="item.goods_small_logo"
              alt="">
         <div class="right">
@@ -48,30 +50,45 @@ export default {
       // 是否在请求中
       isRequest: false,
       // 默认不是最后一页
-      isLastPage: false
+      isLastPage: false,
+      // 搜索栏定位
+      isFixed: false
+
     }
   },
   onLoad (options) {
     this.keywords = options.name
-    // console.log(this.keywords)
+    // 重置页码
+    this.pageNum = 1
+    this.isRequest = false
+    // 清空数组
+    this.goodsList = []
     // 搜索请求
     this.GoodsList()
   },
 
   // 退出当前搜索页面时清空商品列表数组和页数
   onUnload: function () {
+    // 清空数组重置页码
     this.goodsList = []
-    this.pageNum = ''
+    this.pageNum = '1'
+  },
+
+  // 监测屏幕的位置
+  onPageScroll () {
+    this.isFixed = true
   },
 
   // 下拉刷新
   onPullDownRefresh () {
+    this.isFixed = false
     this.isLastPage = false
     this.reload()
   },
 
   // 上拉加载
   onReachBottom () {
+    this.isFixed = true
     this.GoodsList()
     // 加载下一页的数据
     // 页码+1，再发请求
@@ -79,11 +96,17 @@ export default {
   },
 
   methods: {
+    toItem (goodsId) {
+      wx.navigateTo({
+        url: '/pages/item/main?goodsId=' + goodsId
+      })
+    },
     reload () {
       // 搜索列表清空
       this.goodsList = []
       this.pageNum = 1
       this.GoodsList()
+      this.isLastPage = false
     },
 
     async GoodsList () {
@@ -96,6 +119,7 @@ export default {
       this.isRequest = true
       const data = await this.$request({
         url: '/api/public/v1/goods/search',
+        // 请求参数
         data: {
           query: this.keywords,
           pagesize: PAGE_SIZE,
@@ -121,11 +145,23 @@ export default {
 </script>
 
 <style lang="less">
+.top-header{
+  position:static;
+  top:0;
+  left:0;
+  right:0;
+  background-color: #fff;
+}
+
+.goods-list{
+  margin-top:220rpx;
+}
+
 .header {
   height: 120rpx;
   padding: 30rpx 16rpx;
   box-sizing: border-box;
-  background-color: #eee;
+  background-color: #eb4450;
   position: relative;
   icon {
     position: absolute;
@@ -147,8 +183,14 @@ export default {
   justify-content: space-around;
   align-items: center;
   height: 100rpx;
+  li {
+    flex: 1;
+    text-align: center;
+    font-weight: bold;
+  }
   li.active {
     color: #eb4450;
+    border-bottom: 5px solid red;
   }
 }
 .goods {

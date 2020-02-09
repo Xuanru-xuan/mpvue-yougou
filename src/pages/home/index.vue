@@ -56,6 +56,7 @@ export default {
   },
 
   onLoad () {
+    // 页面初始化时加载
     this.getSwiperdata()
     this.getCatitems()
     this.getFloordata()

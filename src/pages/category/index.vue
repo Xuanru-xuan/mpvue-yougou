@@ -50,11 +50,13 @@ export default {
     this.getCategories()
   },
   methods: {
+    // 发动请求
     async getCategories () {
       this.categories = await this.$request({
         url: '/api/public/v1/categories'
       })
     },
+    // 跳转搜索列表页面
     toSearchBar (name) {
       wx.navigateTo({
         url: '/pages/search_list/main?name=' + name
