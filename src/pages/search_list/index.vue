@@ -2,13 +2,14 @@
   <div>
       <!-- 头部 -->
      <div class="top-header" :style="{position:isFixed?'fixed':'static'}">
-      <div class="header">
+      <!-- <div class="header">
         <icon type="search"
               size="16"
               color="#bbb">
         </icon>
         <input type="text" v-model="keywords" @confirm="reload" confirm-type="search">
-      </div>
+      </div> -->
+      <SearchBar :sendSonKeyWorld="keywords" @fnSendFather="doSearch"/>
 
       <!-- 过滤菜单 -->
       <ul class="filter-menu">
@@ -34,8 +35,10 @@
   </div>
 </template>
 <script>
+import SearchBar from '../../components/search'
 const PAGE_SIZE = 6
 export default {
+  components: {SearchBar},
   data () {
     return {
       tabList: [
@@ -59,12 +62,13 @@ export default {
   onLoad (options) {
     this.keywords = options.name
     // 重置页码
-    this.pageNum = 1
+    // this.pageNum = 1
     this.isRequest = false
-    // 清空数组
-    this.goodsList = []
-    // 搜索请求
-    this.GoodsList()
+    // // 清空数组
+    // this.goodsList = []
+    // // 搜索请求
+    // this.GoodsList()
+    this.reload()
   },
 
   // 退出当前搜索页面时清空商品列表数组和页数
@@ -96,6 +100,11 @@ export default {
   },
 
   methods: {
+    // 从子组件接收回来定义的方法
+    doSearch (keywords) {
+      this.keywords = keywords
+      this.reload()
+    },
     toItem (goodsId) {
       wx.navigateTo({
         url: '/pages/item/main?goodsId=' + goodsId
