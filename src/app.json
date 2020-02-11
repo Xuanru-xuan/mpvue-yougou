@@ -7,6 +7,7 @@
     "pages/search_list/main",
     "pages/login/main",
     "pages/pay/main",
+    "pages/historySearch/main",
     "pages/item/main"
     ],
   "window": {

@@ -123,6 +123,13 @@
 					"id": -1,
 					"name": "pages/category/main",
 					"pathName": "pages/historySearch/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/home/main",
+					"pathName": "pages/home/main",
 					"scene": null
 				}
 			]

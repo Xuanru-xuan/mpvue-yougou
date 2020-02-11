@@ -2,7 +2,7 @@
     <!-- 头部 -->
     <div class="header">
       <div class="inner">
-        <input type="search" placeholder="搜索">
+        <input type="search" placeholder="搜索" @click="toHistorySearchBar">
         <!-- <icon type="search" size="16"></icon> -->
         <!-- <span>搜索</span> -->
       </div>
@@ -11,10 +11,16 @@
 
 <script>
 export default {
-
+  methods: {
+    toHistorySearchBar () {
+      wx.navigateTo({
+        url: '/pages/historySearch/main'
+      })
+    }
+  }
 }
 </script>
-
+ 
 <style lang="less">
 .header {
   height: 100rpx;

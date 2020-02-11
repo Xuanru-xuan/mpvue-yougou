@@ -75,11 +75,11 @@
         <span class="iconfont icon-kefu"></span>
         <span>联系客服</span>
       </div>
-      <div class="icon-text">
+      <div class="icon-text" @click="toCart">
         <span class="iconfont icon-cart"></span>
         <span>购物车</span>
       </div>
-      <div class="btn add-cart-btn">加入购物车</div>
+      <div class="btn add-cart-btn" @click="addCart">加入购物车</div>
       <div class="btn buy-btn">立即购买</div>
     </div>
   </div>
@@ -143,6 +143,26 @@ export default {
         current: urls[index], // 当前显示图片的http链接
         urls // 需要预览的图片http链接列表
       })
+    },
+    // 跳转购物车页面
+    toCart () {
+      wx.switchTab({ url: '/pages/cart/main' })
+    },
+    addCart () {
+      // 得到当前商品的id
+      let goodsId = this.goods.goods_id
+      // 从storage里面取购物车数据   去不到给个空对象
+      let cart = wx.getStorageSync('cart') || {}
+      // 更改
+      // 后续添加 num++, checked:true
+      // 第一次添加，num:0,checked:true
+      // 看cart里面有没有这个商品
+      cart[goodsId] = {
+        num: cart[goodsId] ? cart[goodsId].num + 1 : 1,
+        checked: true
+      }
+      // 存回去
+      wx.setStorageSync('cart', cart)
     }
   }
 }
