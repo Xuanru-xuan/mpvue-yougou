@@ -9,7 +9,7 @@
     <!-- 商品列表 -->
     <ul class="goods-list">
       <li class="goods-item" v-for="(item, index) in cartGoodsList" :key="index">
-        <span class="iconfont icon-yuanquandagou"></span>
+        <span class="iconfont" :class="item.checked? 'icon-yuanquandagou': 'icon-un-check'" @click="item.checked=!item.checked"></span>
         <img :src="item.goods_small_logo" alt="" />
         <div class="right">
           <p class="line2">{{ item.goods_name }}</p>
@@ -19,25 +19,25 @@
               >.00</span
             >
             <div class="goods-num">
-              <span @click="cart[item.goods_id].num--">-</span>
-              <span>{{cart[item.goods_id].num}}</span>
-              <span @click="cart[item.goods_id].num++">+</span>
+              <button @click="item.num--" :disabled="item.num===1">-</button>
+              <button class="btn">{{item.num}}</button>
+              <button @click="item.num++">+</button>
             </div>
           </div>
         </div>
       </li>
     </ul>
     <div class="account">
-      <div class="select-all">
-        <span class="iconfont icon-checked"></span>
+      <div class="select-all" @click="isAll =!isAll">
+        <span class="iconfont" :class="isAll? 'icon-yuanquandagou':'icon-un-check'"></span>
         <span>全选</span>
       </div>
 
       <div class="price">
-        <p>合计:<span class="num">￥1000.00</span></p>
+        <p>合计:<span class="num">￥{{ totalPrice }}.00</span></p>
         <p class="info">包含运费</p>
       </div>
-      <div class="account-btn" @click="toPay">结算(1000)</div>
+      <div class="account-btn" @click="toPay">结算({{ totalNum }})</div>
     </div>
   </div>
 </template>
@@ -46,14 +46,50 @@
 export default {
   data () {
     return {
-      cart: {},
+      // cart: {},
       cartGoodsList: []
     }
   },
   // 页面显示时候的钩子函数
   onShow () {
-    this.cart = wx.getStorageSync('cart') || {}
     this.getCartGoodsList()
+  },
+  // 页面隐藏时执行
+  onHide () {
+    // 把goodsList的数据存到storage里面去
+    let cart = wx.getStorageSync('cart')
+    for (let key in cart) {
+      cart[key] = this.cartGoodsList[key]
+    }
+    wx.setStorageSync('cart', cart)
+  },
+  computed: {
+    isAll: {
+      get () {
+        // 所有商品都选中(every)，返回true
+        return this.cartGoodsList.every(v => {
+          return v.checked
+        })
+      },
+      set (status) {
+        // 如果想真正改变计算属性，需要改变计算属性的依赖
+        this.cartGoodsList.forEach(v => {
+          v.checked = status
+        })
+      }
+    },
+    totalNum () {
+    // 选中的商品数量之和
+      return this.cartGoodsList.reduce((sum, v) => {
+        return sum + (v.checked ? v.num : 0)
+      }, 0)
+    },
+    totalPrice () {
+      // 选中的商品数量*价格之和   sum对应0 为初始值
+      return this.cartGoodsList.reduce((sum, v) => {
+        return sum + (v.checked ? v.num * v.goods_price : 0)
+      }, 0)
+    }
   },
   methods: {
     toPay () {
@@ -62,11 +98,21 @@ export default {
       })
     },
     async getCartGoodsList () {
-      let goodsId = Object.keys(this.cart).join(',')
-      console.log(goodsId)
-      this.cartGoodsList = await this.$request({
-        url: '/api/public/v1/goods/goodslist?goods_ids=' + goodsId
-      })
+      let cart = wx.getStorageSync('cart') || {}
+      let goodsId = Object.keys(cart).join(',')
+      // console.log(goodsId)
+      if (goodsId) {
+        let cartGoodsList = await this.$request({
+          url: '/api/public/v1/goods/goodslist?goods_ids=' + goodsId
+        })
+        // 合并购物车数据和购物商品列表数据
+        cartGoodsList.forEach(v => {
+          v.num = cart[v.goods_id].num
+          v.checked = cart[v.goods_id].checked
+        })
+        // 对data的改变，尽量一步到位
+        this.cartGoodsList = cartGoodsList
+      }
     }
   }
 }
@@ -110,9 +156,9 @@ export default {
   .iconfont {
     margin-left: 10rpx;
   }
-  .icon-shangpu {
+  .icon-yuanquandagou {
     color: #eb4450;
-    margin: 0 30rpx;
+    // margin: 0 30rpx;
   }
   img {
     width: 160rpx;
@@ -146,18 +192,29 @@ export default {
         width: 200rpx;
         display: flex;
         align-items: center;
-        // button {
-        //   width: 50rpx;
-        //   height: 46rpx;
-        //   // box-sizing: border-box;
-        //   display: flex;
-        //   justify-content: center;
-        //   // align-items: center;
-        //   line-height: 46rpx;
-        //   border: 1rpx solid #000;
-        //   background-color: #fff;
-        //   border-radius: 0;
-        // }
+        button {
+          width: 50rpx;
+          height: 48rpxrpx;
+          box-sizing: border-box;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          line-height: 46rpx;
+          border: 0;
+          border: 1rpx solid #000;
+          background-color: #fff;
+          border-radius: 0;
+        }
+        button::after{
+           border: none;
+           border-radius: 0;
+           border: 1px solid #000;
+         }
+         .btn {
+           flex: 1;
+           border-left: 0;
+           border-right: 0;
+         }
         span {
           // margin: 0 30rpx;
           border: 1px solid #000;
@@ -165,16 +222,18 @@ export default {
           border-right: 0;
           flex: 1;
           text-align: center;
-          &:nth-child(2) {
-            border-left: 1px solid #000;
-            border-right: 1px solid #000;
-          }
-          &:nth-child(3) {
-            border-right: 1px solid #000;
-          }
-          &:first-child {
-            border-left: 1px solid #000;
-          }
+          display: inline-block;
+          height: 46rpx;
+          // &:nth-child(2) {
+          //   border-top: 1px solid #000;
+          //   border-bottom: 1px solid #000;
+          // }
+          // &:nth-child(3) {
+          //   border-right: 1px solid #000;
+          // }
+          // &:first-child {
+          //   border-left: 1px solid #000;
+          // }
         }
       }
     }

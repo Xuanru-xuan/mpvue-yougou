@@ -163,6 +163,10 @@ export default {
       }
       // 存回去
       wx.setStorageSync('cart', cart)
+      wx.showToast({
+        title: '添加成功!',
+        icon: 'success'
+      })
     }
   }
 }
