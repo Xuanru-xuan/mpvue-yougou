@@ -55,7 +55,7 @@ export default {
     }
   },
 
-  onLoad () {
+  created () {
     // 页面初始化时加载
     this.getSwiperdata()
     this.getCatitems()

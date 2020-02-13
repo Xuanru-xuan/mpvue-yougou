@@ -34,19 +34,19 @@
         <p class="title">我的订单</p>
         <ul>
           <li>
-            <span class="iconfont"></span>
+            <span class="iconfont icon-daifu"></span>
             <span>待付款</span>
           </li>
           <li>
-            <span class="iconfont"></span>
+            <span class="iconfont icon-daishouhuo"></span>
             <span>待收货</span>
           </li>
           <li>
-            <span class="iconfont"></span>
+            <span class="iconfont icon-tuihuo"></span>
             <span>退款/退货</span>
           </li>
           <li>
-            <span class="iconfont"></span>
+            <span class="iconfont icon-quanbudingdan"></span>
             <span>全部订单</span>
           </li>
         </ul>
@@ -83,6 +83,7 @@ export default {
 </script>
 
 <style lang="less">
+@import url('../../css/iconfont2.css');
 .container {
   background-color: #f4f4f4;
   padding-bottom: 40rpx;
@@ -160,6 +161,7 @@ export default {
           color: #eb4450;
           margin-bottom: 20rpx;
           font-size: 48rpx;
+          font-weight: bold;
         }
       }
     }

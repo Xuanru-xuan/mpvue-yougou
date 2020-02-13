@@ -46,7 +46,7 @@ export default {
       categories: []
     }
   },
-  onLoad () {
+  created () {
     this.getCategories()
   },
   methods: {

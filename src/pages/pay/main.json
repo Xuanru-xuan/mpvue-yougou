@@ -1,3 +1,5 @@
 {
-  "navigationBarTitleText": "支付"
+      "navigationBarTitleText": "支付",
+  "navigationBarBackgroundColor": "#eb4450",
+  "navigationBarTextStyle": "white"
 }

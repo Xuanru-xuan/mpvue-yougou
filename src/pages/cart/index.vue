@@ -52,15 +52,19 @@ export default {
   },
   // 页面显示时候的钩子函数
   onShow () {
+  // created () {
     this.getCartGoodsList()
   },
   // 页面隐藏时执行
   onHide () {
     // 把goodsList的数据存到storage里面去
-    let cart = wx.getStorageSync('cart')
-    for (let key in cart) {
-      cart[key] = this.cartGoodsList[key]
-    }
+    let cart = {}
+    this.cartGoodsList.forEach(v => {
+      cart[v.goods_id] = {
+        num: v.num,
+        checked: v.checked
+      }
+    })
     wx.setStorageSync('cart', cart)
   },
   computed: {
@@ -93,10 +97,25 @@ export default {
   },
   methods: {
     toPay () {
-      wx.navigateTo({
-        url: '/pages/pay/main'
-      })
+      // 如果商品数量为0，提示
+      if (!this.totalNum) {
+        wx.showToast({
+          title: '请选择需要支付的商品！',
+          icon: 'none'
+        })
+        return
+      }
+      // 如果未登陆，跳转登录
+      let token = wx.getStorageSync('token')
+      if (!token) {
+        // wx.navigateTo({ url: '/pages/login/main' })
+        // TODO 这里是否需要return
+        // return
+      }
+      // 跳转支付
+      wx.navigateTo({ url: '/pages/pay/main' })
     },
+
     async getCartGoodsList () {
       let cart = wx.getStorageSync('cart') || {}
       let goodsId = Object.keys(cart).join(',')
