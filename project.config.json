@@ -21,7 +21,7 @@
 	},
 	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",
-	"appid": "wx694d51fa17a7bba3",
+	"appid": "wx38d8faffac4d34d2",
 	"projectname": "mpvue-yougou",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},

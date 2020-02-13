@@ -108,9 +108,9 @@ export default {
       // 如果未登陆，跳转登录
       let token = wx.getStorageSync('token')
       if (!token) {
-        // wx.navigateTo({ url: '/pages/login/main' })
+        wx.navigateTo({ url: '/pages/login/main' })
         // TODO 这里是否需要return
-        // return
+        return
       }
       // 跳转支付
       wx.navigateTo({ url: '/pages/pay/main' })

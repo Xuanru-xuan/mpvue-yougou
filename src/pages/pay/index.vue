@@ -16,7 +16,7 @@
         <span class="iconfont icon-arrow-right"></span>
       </div>
       <div class="flower">
-        <img src="/static/images/cart_border@2x.png" />
+        <img src="../../../static/images/cart_border@2x.png" />
       </div>
     </div>
 
@@ -294,7 +294,7 @@ export default {
   box-sizing: border-box;
   align-items: center;
   padding: 0 20rpx;
-  margin-top: 10rpx;
+  margin-top: 30rpx;
   img {
     width: 160rpx;
     height: 160rpx;
@@ -311,6 +311,7 @@ export default {
       display: -webkit-box;
       -webkit-line-clamp: 2; // 控制多行的行数
       -webkit-box-orient: vertical;
+      padding-top: 10rpx;
     }
     .btm {
       display: flex;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button open-type="getUserInfo" @getuserinfo="getUserInfo">登录</button>
+    <button open-type="getUserInfo" @getuserinfo="getUserInfo">点我登录</button>
   </div>
 </template>
 
@@ -8,7 +8,6 @@
 export default {
   methods: {
     getUserInfo (userInfo) {
-      // console.log(userInfo)
       let detail = userInfo.mp.detail
       console.log(detail)
       wx.login({
@@ -24,8 +23,9 @@ export default {
               rawData: detail.rawData,
               signature: detail.signature
             },
-            method: 'post'
+            method: 'POST'
           })
+          console.log(data)
           // 存储token并back
           wx.setStorageSync('token', data.token)
           wx.navigateBack()
@@ -36,4 +36,5 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+</style>
