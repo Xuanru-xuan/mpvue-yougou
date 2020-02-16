@@ -8,6 +8,7 @@
     "pages/login/main",
     "pages/pay/main",
     "pages/historySearch/main",
+    "pages/order/main",
     "pages/item/main"
     ],
   "window": {

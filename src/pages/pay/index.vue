@@ -53,7 +53,8 @@ export default {
       goodsList: []
     }
   },
-  onLoad () {
+  onLoad (options) {
+    this.goodsId = options.goodsId
     this.getGoodsList()
   },
   computed: {
@@ -94,9 +95,7 @@ export default {
       let data = await this.$request({
         url: '/api/public/v1/my/orders/create',
         method: 'POST',
-        header: {
-          'Authorization': this.token
-        },
+        isAuth: true,
         data: {
           order_price: this.totalPrice,
           consignee_addr: this.detailAddr,
@@ -126,9 +125,7 @@ export default {
       let data = await this.$request({
         url: '/api/public/v1/my/orders/req_unifiedorder',
         method: 'POST',
-        header: {
-          'Authorization': this.token
-        },
+        isAuth: true,
         data: {
           order_number: this.orderNumber
         }
@@ -167,6 +164,16 @@ export default {
 
     async getGoodsList () {
       let cart = wx.getStorageSync('cart') || {}
+
+      // 如果立即购买，也构造一个购物车
+      if (this.goodsId) {
+        cart = {
+          [this.goodsId]: {
+            num: 1,
+            checked: true
+          }
+        }
+      }
       // 过滤掉购物车中未选中的商品
       let ids = this.filterCartIds(cart)
 
@@ -187,6 +194,7 @@ export default {
         this.goodsList = goodsList
       }
     },
+
     filterCartIds (cart) {
       let idsArr = []
       for (let key in cart) {

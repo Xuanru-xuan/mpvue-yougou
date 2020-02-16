@@ -80,7 +80,7 @@
         <span>购物车</span>
       </div>
       <div class="btn add-cart-btn" @click="addCart">加入购物车</div>
-      <div class="btn buy-btn">立即购买</div>
+      <div class="btn buy-btn" @click="toBuy">立即购买</div>
     </div>
   </div>
 </template>
@@ -148,25 +148,33 @@ export default {
     toCart () {
       wx.switchTab({ url: '/pages/cart/main' })
     },
+    // 添加购物车
     addCart () {
-      // 得到当前商品的id
-      let goodsId = this.goods.goods_id
-      // 从storage里面取购物车数据   去不到给个空对象
-      let cart = wx.getStorageSync('cart') || {}
-      // 更改
-      // 后续添加 num++, checked:true
-      // 第一次添加，num:0,checked:true
-      // 看cart里面有没有这个商品
-      cart[goodsId] = {
-        num: cart[goodsId] ? cart[goodsId].num + 1 : 1,
-        checked: true
-      }
-      // 存回去
-      wx.setStorageSync('cart', cart)
-      wx.showToast({
-        title: '添加成功!',
-        icon: 'success'
-      })
+      this.$store.commit('addCart', this.goods.goods_id)
+      // // 得到当前商品的id
+      // let goodsId = this.goods.goods_id
+      // // 从storage里面取购物车数据   去不到给个空对象
+      // let cart = wx.getStorageSync('cart') || {}
+      // // 更改
+      // // 后续添加 num++, checked:true
+      // // 第一次添加，num:0,checked:true
+      // // 看cart里面有没有这个商品
+      // cart[goodsId] = {
+      //   num: cart[goodsId] ? cart[goodsId].num + 1 : 1,
+      //   checked: true
+      // }
+      // // 存回去
+      // wx.setStorageSync('cart', cart)
+      // wx.showToast({
+      //   title: '添加成功!',
+      //   icon: 'success'
+      // })
+    },
+
+    // 立即购买
+    // 跳转支付
+    toBuy () {
+      wx.navigateTo({ url: '/pages/pay/main?goodsId=' + this.goods.goods_id })
     }
   }
 }

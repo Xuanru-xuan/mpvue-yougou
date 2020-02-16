@@ -3,12 +3,12 @@
     <div class="header">
       <div class="portrait-wrapper">
         <div class="portrait">
-          <img src="http://www.sucaijishi.com/uploadfile/2018/0508/20180508023717621.png"
+          <img :src="userInfo.avatarUrl?userInfo.avatarUrl:defaultImgUrl"
                alt="">
         </div>
       </div>
-      <p @click="toLogin">登录</p>
-      <p>APP轩乐</p>
+      <p v-if="userInfo.nickName">{{userInfo.nickName}}</p>
+      <p v-else @click="toLogin">登录</p>
     </div>
     <!-- 主要内容部分 -->
     <div class="content">
@@ -33,11 +33,11 @@
       <div class="order-detail">
         <p class="title">我的订单</p>
         <ul>
-          <li>
-            <span class="iconfont icon-daifu"></span>
-            <span>待付款</span>
+          <li v-for="(item, index) in tabList" :key="index" @click="toOrder(item.index)">
+            <span class="iconfont" :class="item.classActive"></span>
+            <span>{{ item.title }}</span>
           </li>
-          <li>
+          <!-- <li>
             <span class="iconfont icon-daishouhuo"></span>
             <span>待收货</span>
           </li>
@@ -48,7 +48,7 @@
           <li>
             <span class="iconfont icon-quanbudingdan"></span>
             <span>全部订单</span>
-          </li>
+          </li> -->
         </ul>
       </div>
       <div class="address">
@@ -59,7 +59,7 @@
         <ul>
           <li>
             <span>联系客服</span>
-            <span class="right">400-618-4000</span>
+            <span class="right" @click="makeCall('400-618-4000')">400-618-4000</span>
           </li>
           <li>
             <span>意见反馈</span>
@@ -71,11 +71,37 @@
 </template>
 
 <script>
+const DEFAULT_IMG_URL = 'http://www.sucaijishi.com/uploadfile/2018/0508/20180508023717621.png'
+
 export default {
+  data () {
+    return {
+      userInfo: {},
+      defaultImgUrl: DEFAULT_IMG_URL,
+      clection: '',
+      tabList: [
+        {title: '待付款', classActive: 'icon-daifu', index: 1},
+        {title: '待收货', classActive: 'icon-daishouhuo', index: 2},
+        {title: '退款/退货', classActive: 'icon-tuihuo', index: 3},
+        {title: '全部订单', classActive: 'icon-quanbudingdan', index: 0}
+      ]
+    }
+  },
+  onShow () {
+    this.userInfo = wx.getStorageSync('userInfo') || {}
+    this.clection = wx.getStorageSync('cart') || {}
+    console.log(this.clection)
+  },
   methods: {
     toLogin () {
+      wx.navigateTo({ url: '/pages/login/main' })
+    },
+    makeCall (str) {
+      wx.makePhoneCall({ phoneNumber: str })
+    },
+    toOrder (index) {
       wx.navigateTo({
-        url: '/pages/login/main'
+        url: '/pages/order/main?activeIndex=' + index
       })
     }
   }

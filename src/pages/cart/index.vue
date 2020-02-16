@@ -19,9 +19,9 @@
               >.00</span
             >
             <div class="goods-num">
-              <button @click="item.num--" :disabled="item.num===1">-</button>
+              <button @click="sub(item)" :disabled="item.num===1">-</button>
               <button class="btn">{{item.num}}</button>
-              <button @click="item.num++">+</button>
+              <button @click="add(item)">+</button>
             </div>
           </div>
         </div>
@@ -53,7 +53,16 @@ export default {
   // 页面显示时候的钩子函数
   onShow () {
   // created () {
+    // 每次请求数据前，清空goodsList
+    this.cartGoodsList = []
     this.getCartGoodsList()
+
+    // 设置tab栏的徽标
+    wx.setTabBarBadge({
+      index: 2,
+      // text是string类型
+      text: Object.keys(wx.getStorageSync('cart')).length + ''
+    })
   },
   // 页面隐藏时执行
   onHide () {
@@ -96,6 +105,14 @@ export default {
     }
   },
   methods: {
+    sub (item) {
+      item.num--
+      this.$store.commit('updateItem', item)
+    },
+    add (item) {
+      item.num++
+      this.$store.commit('updateItem', item)
+    },
     toPay () {
       // 如果商品数量为0，提示
       if (!this.totalNum) {
@@ -117,7 +134,8 @@ export default {
     },
 
     async getCartGoodsList () {
-      let cart = wx.getStorageSync('cart') || {}
+      // let cart = wx.getStorageSync('cart') || {}
+      let cart = this.$store.getters.getCart || {}
       let goodsId = Object.keys(cart).join(',')
       // console.log(goodsId)
       if (goodsId) {
