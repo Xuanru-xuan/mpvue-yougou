@@ -9,7 +9,8 @@
     <!-- 商品列表 -->
     <ul class="goods-list">
       <li class="goods-item" v-for="(item, index) in cartGoodsList" :key="index">
-        <span class="iconfont" :class="item.checked? 'icon-yuanquandagou': 'icon-un-check'" @click="item.checked=!item.checked"></span>
+        <span class="iconfont" :class="item.checked? 'icon-yuanquandagou': 'icon-un-check'"  @click="toggleItem(item)"></span> 
+         <!-- @click="item.checked=!item.checked" -->
         <img :src="item.goods_small_logo" alt="" />
         <div class="right">
           <p class="line2">{{ item.goods_name }}</p>
@@ -61,7 +62,8 @@ export default {
     wx.setTabBarBadge({
       index: 2,
       // text是string类型
-      text: Object.keys(wx.getStorageSync('cart')).length + ''
+      text: Object.keys(this.$store.getters.getCart).length + ''
+      // text: Object.keys(wx.getStorageSync('cart')).length + ''
     })
   },
   // 页面隐藏时执行
@@ -89,6 +91,8 @@ export default {
         this.cartGoodsList.forEach(v => {
           v.checked = status
         })
+        // 更新state.cart每一个商品的状态
+        this.$store.commit('updateCartStatus', status)
       }
     },
     totalNum () {
@@ -111,6 +115,11 @@ export default {
     },
     add (item) {
       item.num++
+      this.$store.commit('updateItem', item)
+    },
+    // 单个商品点击勾选和不勾选
+    toggleItem (item) {
+      item.checked = !item.checked
       this.$store.commit('updateItem', item)
     },
     toPay () {

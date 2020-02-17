@@ -43,6 +43,9 @@
 
 <script>
 import searchLink from '../../components/searchLink'
+
+// 抽取api
+import {getSwiperdata} from '../../api/index'
 export default {
   components: {
     searchLink
@@ -64,9 +67,8 @@ export default {
 
   methods: {
     async getSwiperdata () {
-      this.swiperdata = await this.$request({
-        url: '/api/public/v1/home/swiperdata'
-      })
+      // 抽取api
+      this.swiperdata = await getSwiperdata()
     },
     getCatitems () {
       this.$request({

@@ -149,21 +149,22 @@ export default {
 
     // 去掉购物车中选中的商品
     arrangeCart () {
-      // 从storage中取出cart
-      let cart = wx.getStorageSync('cart') || {}
-      // 更新cart
-      for (let key in cart) {
-        // 如果商品选择就删除
-        if (cart[key].checked) {
-          delete cart[key]
-        }
-      }
-      // 存cart到storage
-      wx.setStorageSync('cart', cart)
+      this.$store.commit('arrangeCart')
+      // // 从storage中取出cart
+      // let cart = wx.getStorageSync('cart') || {}
+      // // 更新cart
+      // for (let key in cart) {
+      //   // 如果商品选择就删除
+      //   if (cart[key].checked) {
+      //     delete cart[key]
+      //   }
+      // }
+      // // 存cart到storage
+      // wx.setStorageSync('cart', cart)
     },
 
     async getGoodsList () {
-      let cart = wx.getStorageSync('cart') || {}
+      let cart = this.$store.getters.getCart || {}
 
       // 如果立即购买，也构造一个购物车
       if (this.goodsId) {

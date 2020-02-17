@@ -46,6 +46,26 @@ const store = new Vuex.Store({
         num: item.num,
         checked: item.checked
       }
+    },
+    // 更新state.cart每一个商品的状态
+    updateCartStatus (state, status) {
+      let cart = state.cart
+      for (let key in cart) {
+        cart[key].checked = status
+      }
+    },
+
+    // 去掉购物车中选中已经购买的商品
+    arrangeCart (state) {
+      // 从storage中取出cart
+      let cart = state.cart
+      // 更新cart
+      for (let key in cart) {
+        // 如果商品选择就删除
+        if (cart[key].checked) {
+          delete cart[key]
+        }
+      }
     }
   },
 
